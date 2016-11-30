@@ -1,10 +1,11 @@
 ---
-abstract: 'Access Xero Accounting Package Public and Private Applicaiton API'
+abstract: 'Access Xero Accounting Package Public and Private Application API'
 author:
   - 'Peter Scott <peter@computerpros.com.au>'
 build_requires:
   Config::Tiny: '0'
-  Test::More: '0'
+  JSON: '0'
+  Test::More: '0.88'
 configure_requires:
   ExtUtils::MakeMaker: '0'
 dynamic_config: 1
@@ -31,4 +32,4 @@ requires:
   URI::Encode: '0'
   XML::Simple: '0'
   perl: '5.006'
-version: '0.10'
+version: '0.11'

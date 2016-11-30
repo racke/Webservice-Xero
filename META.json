@@ -1,5 +1,5 @@
 {
-   "abstract" : "Access Xero Accounting Package Public and Private Applicaiton API",
+   "abstract" : "Access Xero Accounting Package Public and Private Application API",
    "author" : [
       "Peter Scott <peter@computerpros.com.au>"
    ],
@@ -23,7 +23,8 @@
       "build" : {
          "requires" : {
             "Config::Tiny" : "0",
-            "Test::More" : "0"
+            "JSON" : "0",
+            "Test::More" : "0.88"
          }
       },
       "configure" : {
@@ -49,5 +50,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.10"
+   "version" : "0.11"
 }
