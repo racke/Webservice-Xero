@@ -178,7 +178,7 @@ sub do_xero_api_call
     nonce => 'ccp' . md5_base64( join('', rand_chars(size => 8, set => 'alphanumeric')) . time ), 
   );
   $opts{verifier} = $self->{verifier} if defined $self->{verifier};
-  $opts{extra_params} = { xml => $xml}  if ( $method eq 'POST' and defined $xml );
+  $opts{extra_params} = { xml => $xml}  if ( ($method eq 'POST' or $method eq 'PUT') and defined $xml );
 
 
   my $access = Net::OAuth->request("protected resource")->new( %opts );
@@ -193,7 +193,7 @@ sub do_xero_api_call
   }
   my $req = HTTP::Request->new( $method,  $uri );
   
-  if ( $method eq 'POST' )
+  if ( $method eq 'POST' or $method eq 'PUT' )
   {
     $req->header(  'Content-Type' => 'application/x-www-form-urlencoded; charset=utf-8');
     $req->header( 'Accept' => 'application/json');
