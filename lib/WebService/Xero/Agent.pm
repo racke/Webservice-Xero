@@ -71,6 +71,7 @@ sub new
       internal_token_secret    => $params{internal_token_secret}    || "",  
       pko             => $params{pko} || undef,
       ua              => LWP::UserAgent->new(ssl_opts => { verify_hostname => 1 },),
+      response        => undef,
       _status           => undef,
     }, $class;
     return $self->_validate_agent(); ## derived classes to validate required properties
@@ -165,6 +166,7 @@ sub do_xero_api_call
   $encryption = 'HMAC-SHA1' if (defined $self->{TOKEN} and $self->{TOKEN} ne $self->{CONSUMER_KEY} ); 
   $self->{TOKEN}        = $self->{CONSUMER_KEY}    unless  $self->{TOKEN};
   $self->{TOKEN_SECRET} = $self->{CONSUMER_SECRET} unless  $self->{TOKEN_SECRET};
+  $self->{response}     = undef;
 
   my %opts = (
     consumer_key     => $self->{CONSUMER_KEY},
@@ -208,13 +210,18 @@ sub do_xero_api_call
   {
     return $self->_error('ONLY POST AND GET CURRENT SUPPORTED BY WebService::Xero Library');
   }
-  my $res = $self->{ua}->request($req);
+  my $res = $self->{response} = $self->{ua}->request($req);
   if ($res->is_success)
   {
     $self->{status} = 'GOT RESPONSE FROM XERO API CALL';
     $data = from_json($res->content) || return $self->api_error( $res->content );  
   } 
-  else 
+  elsif ( $method eq 'GET' and $res->code == 404 )
+  {
+    # normal behaviour when resource is missing
+    return undef;
+  }
+  else
   {
     return $self->api_error($res->content);
   }
